@@ -42,7 +42,8 @@ export default function register() {
         });
     }
 
-    registerValidSW(`${process.env.PUBLIC_URL}/file-worker.js`);
+    navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/file-worker.js`, { scope: '/gallery' });
+    navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/file-worker.js`, { scope: '/Files' });
 }
 
 function registerValidSW(swUrl) {
