@@ -85,6 +85,7 @@ namespace SecureHost
                             if (!match)
                             {
                                 context.Fail("Thumprint mismatch");
+                                return Task.CompletedTask;
                             }
 
                             var claims = new[]
