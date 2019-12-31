@@ -23,9 +23,9 @@ code {
 
 .profile {
     height: auto;
-    margin: 10px;
-    max-width: 20vw;
-    max-height: 20vw;
+    margin: .5vw;
+    max-width: 10vw;
+    max-height: 10vw;
     overflow: hidden;
 }
 
@@ -33,6 +33,7 @@ img.profile {
     margin: 0;
     width: 100%;
     max-height: initial;
+    max-width: 10vw;
 }
 
 @media (orientation: portrait) {
@@ -40,6 +41,11 @@ img.profile {
         height: auto;
         margin: 10px;
         width: 100%;
+        max-width: 100%;
         max-height: initial;
+    }
+
+    img.profile {
+        max-width: 100%;
     }
 }
