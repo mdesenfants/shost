@@ -42,8 +42,8 @@ export default function register() {
         });
     }
 
-    navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/file-worker.js`, { scope: '/gallery' });
-    navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/file-worker.js`, { scope: '/Files' });
+    //navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/file-worker.js`, { scope: '/gallery' });
+    //navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/file-worker.js`, { scope: '/Files' });
 }
 
 function registerValidSW(swUrl) {

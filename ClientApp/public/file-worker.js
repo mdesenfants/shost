@@ -7,20 +7,3 @@
             ))
     )
 );
-
-self.addEventListener('fetch', event => {
-    if (event.request.url.includes("/Files/")) {
-        event.respondWith(
-            caches.open('files-dynamic').then(cache =>
-                cache.match(event.request).then(response =>
-                    response || fetch(event.request).then(response => {
-                        cache.put(event.request, response.clone());
-                        return response;
-                    })
-                )
-            )
-        );
-    } else {
-        event.respondWith(fetch(event.request));
-    }
-});

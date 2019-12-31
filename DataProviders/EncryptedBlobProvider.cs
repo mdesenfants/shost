@@ -67,9 +67,15 @@ namespace SecureHost.DataProviders
             return result;
         }
 
-        public async Task<(Stream content, string contentType)> DownloadDecryptedAsync(string blobName)
+        public async Task<(Stream content, string contentType, string eTag)> DownloadDecryptedAsync(string blobName, string etag)
         {
             var blob = Container.GetBlobClient(blobName);
+
+            var props = await blob.GetPropertiesAsync();
+            if (props.Value.ETag == new ETag(etag))
+            {
+                return (null, null, props.Value.ETag.ToString());
+            }
 
             var info = (await blob.DownloadAsync()).Value;
 
@@ -94,7 +100,7 @@ namespace SecureHost.DataProviders
             };
 
             var content = new MemoryStream(PerformCryptography(Convert.FromBase64String(envelope.Content), aes.CreateDecryptor()));
-            return (content, contentType);
+            return (content, contentType, info.Details.ETag.ToString());
         }
 
         private async Task<string> WrapKey(byte[] value, string keyIdentifier)

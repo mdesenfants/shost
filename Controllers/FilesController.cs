@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
+using Microsoft.Net.Http.Headers;
 using SecureHost.DataProviders;
 using System;
 using System.Collections.Concurrent;
@@ -17,6 +19,9 @@ namespace SecureHost.Controllers
         public IConfiguration Config { get; }
         public EncryptedBlobProvider Container { get; }
         public BlobContainerClient Client { get; }
+
+        [FromHeader(Name = "If-None-Match")]
+        public string IfNoneMatch { get; set; }
 
         public FilesController(IConfiguration config, EncryptedBlobProvider container, BlobContainerClient client)
         {
@@ -48,6 +53,7 @@ namespace SecureHost.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Get()
         {
             var items = new ConcurrentBag<string>();
@@ -65,7 +71,16 @@ namespace SecureHost.Controllers
         {
             try
             {
-                var (content, info) = await Container.DownloadDecryptedAsync(file);
+                var (content, info, etag) = await Container.DownloadDecryptedAsync(file, IfNoneMatch);
+
+                Response.Headers[HeaderNames.ETag] = new string[] { etag };
+                Response.Headers[HeaderNames.Vary] = new string[] { HeaderNames.ETag };
+
+                if (etag == IfNoneMatch)
+                {
+                    return StatusCode(304);
+                }
+
                 return File(content, info);
             }
             catch
