@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import ImageGallery from 'react-image-gallery';
+import "react-image-gallery/styles/css/image-gallery.css";
 
 export class FetchData extends Component {
     static displayName = FetchData.name;
@@ -13,13 +15,15 @@ export class FetchData extends Component {
     }
 
     static renderForecastsTable(forecasts) {
-        return (
-            <div className="gallery">{forecasts.map(forecast =>
-                <a key={forecast} href={forecast} className="profile">
-                    <img src={forecast} alt={forecast} className="profile" />
-                </a>)}
-            </div >
-        );
+        //return (
+        //    <div className="gallery">{forecasts.map(forecast =>
+        //        <a key={forecast} href={forecast} className="profile">
+        //            <img src={forecast} alt={forecast} className="profile" />
+        //        </a>)}
+        //    </div >
+        //);
+
+        return <ImageGallery items={forecasts} thumbnailPosition="left" />;
     }
 
     render() {
@@ -52,7 +56,7 @@ export class FetchData extends Component {
     async populateWeatherData() {
         const response = await fetch('files');
         const data = await response.json();
-        const shuffled = this.shuffle(data);
+        const shuffled = this.shuffle(data).map(x => ({ original: x, thumbnail: x }));
         this.setState({ forecasts: shuffled, loading: false });
     }
 }
