@@ -71,10 +71,13 @@ namespace SecureHost.DataProviders
         {
             var blob = Container.GetBlobClient(blobName);
 
-            var props = await blob.GetPropertiesAsync();
-            if (props.Value.ETag == new ETag(etag))
+            if (!string.IsNullOrWhiteSpace(etag))
             {
-                return (null, null, props.Value.ETag.ToString());
+                var props = await blob.GetPropertiesAsync();
+                if (props.Value.ETag == new ETag(etag))
+                {
+                    return (null, null, props.Value.ETag.ToString());
+                }
             }
 
             var info = (await blob.DownloadAsync()).Value;

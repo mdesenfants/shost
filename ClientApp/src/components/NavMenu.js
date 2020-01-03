@@ -36,6 +36,9 @@ export class NavMenu extends Component {
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/upload">Upload</NavLink>
                                 </NavItem>
+                                <NavItem>
+                                    <NavLink href="/Zip" download="download.zip" async={true} className="text-dark">Download</NavLink>
+                                </NavItem>
                             </ul>
                         </Collapse>
                     </Container>
